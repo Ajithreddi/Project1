@@ -1,0 +1,184 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyNKo6jNxGFLSxa2fI5yzzAy",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/Ajithreddi/Project1/blob/main/Projects\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Step 1: Install PySpark\n",
+        "!pip install pyspark"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "_Lht1iCj-CQs",
+        "outputId": "fb53041d-8cf2-4039-97e3-3f96dd6d759c"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Requirement already satisfied: pyspark in /usr/local/lib/python3.11/dist-packages (3.5.1)\n",
+            "Requirement already satisfied: py4j==0.10.9.7 in /usr/local/lib/python3.11/dist-packages (from pyspark) (0.10.9.7)\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Step 2: Import necessary libraries\n",
+        "from pyspark.sql import SparkSession\n",
+        "from pyspark.sql.functions import col"
+      ],
+      "metadata": {
+        "id": "RblDV5Rh-FFA"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Step 3: Create a Spark session\n",
+        "spark = SparkSession.builder \\\n",
+        "    .appName(\"Prototype Task\") \\\n",
+        "    .config(\"spark.sql.shuffle.partitions\", \"4\") \\\n",
+        "    .getOrCreate()"
+      ],
+      "metadata": {
+        "id": "G-QNFbzB-HWA"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Step 4: Create a sample DataFrame\n",
+        "data = [(\"Ajith\", 28, \"Data Scientist\"),\n",
+        "        (\"Sam\", 35, \"Software Engineer\"),\n",
+        "        (\"Emma\", 30, \"Analyst\")]\n",
+        "columns = [\"Name\", \"Age\", \"Occupation\"]\n",
+        "\n",
+        "df = spark.createDataFrame(data, columns)\n"
+      ],
+      "metadata": {
+        "id": "P33onoYi-ONK"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.show()"
+      ],
+      "metadata": {
+        "id": "30s1vsiT-euO",
+        "outputId": "fa66aa92-f378-44a8-86ee-a454795b6e5a",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "+-----+---+-----------------+\n",
+            "| Name|Age|       Occupation|\n",
+            "+-----+---+-----------------+\n",
+            "|Ajith| 28|   Data Scientist|\n",
+            "|  Sam| 35|Software Engineer|\n",
+            "| Emma| 30|          Analyst|\n",
+            "+-----+---+-----------------+\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Step 5: Apply a transformation (filter age < 31)\n",
+        "filtered_df = df.filter(col(\"Age\") < 31)"
+      ],
+      "metadata": {
+        "id": "uf6cwfO8-Pqe"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Step 6: Show results\n",
+        "filtered_df.show()"
+      ],
+      "metadata": {
+        "id": "4GhrANn5-Z4d",
+        "outputId": "45786776-7004-4714-f12a-5a4c4e7349af",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "+-----+---+--------------+\n",
+            "| Name|Age|    Occupation|\n",
+            "+-----+---+--------------+\n",
+            "|Ajith| 28|Data Scientist|\n",
+            "| Emma| 30|       Analyst|\n",
+            "+-----+---+--------------+\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Step 7: Stop Spark session\n",
+        "spark.stop()"
+      ],
+      "metadata": {
+        "id": "8HAAomcL-onI"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
